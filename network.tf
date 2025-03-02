@@ -37,6 +37,19 @@ resource "azurerm_network_security_rule" "aks_nsg_rule" {
   resource_group_name         = azurerm_resource_group.aks_rg.name
   network_security_group_name = azurerm_network_security_group.aks_nsg.name
 }
+resource "azurerm_network_security_rule" "aks_nsg_rule_http" {
+  name                        = "allow-http"
+  priority                    = 110  # Must be different from your HTTPS rule
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.aks_rg.name
+  network_security_group_name = azurerm_network_security_group.aks_nsg.name
+}
 
 # Associate NSG with subnet
 resource "azurerm_subnet_network_security_group_association" "aks_nsg_association" {
